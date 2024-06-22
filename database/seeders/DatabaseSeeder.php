@@ -2,8 +2,6 @@
 
 namespace Database\Seeders;
 
-// use Illuminate\Database\Console\Seeds\WithoutModelEvents;
-
 use App\Models\Alternatif;
 use App\Models\User;
 use App\Models\Kategori;
@@ -31,34 +29,34 @@ class DatabaseSeeder extends Seeder
             'password' => Hash::make('Admin123'),
         ]);
 
-        // $kode = ["A", "B", "C"];
-        // $namaKriteria = ["Harga", "Jumlah Menu", "Popularitas"];
-        // for ($i = 0; $i < 3; $i++) {
-        //     Kriteria::create([
-        //         "kode" => $kode[$i],
-        //         "nama" => $namaKriteria[$i],
-        //     ]);
-        // }
+        $kode = ["A", "B", "C"];
+        $namaKriteria = ["Harga", "Jumlah Menu", "Popularitas"];
+        for ($i = 0; $i < 3; $i++) {
+            Kriteria::create([
+                "kode" => $kode[$i],
+                "nama" => $namaKriteria[$i],
+            ]);
+        }
 
-        // $namaKategori = ["Baik", "Cukup", "Kurang"];
-        // for ($i = 0; $i < 4; $i++) {
-        //     Kategori::create([
-        //         "nama" => $namaKategori[$i],
-        //     ]);
-        // }
+        $namaKategori = ["Baik", "Cukup", "Kurang"];
+        for ($i = 0; $i < count($namaKategori); $i++) {
+            Kategori::create([
+                "nama" => $namaKategori[$i],
+            ]);
+        }
 
-        // $namaSubKategori = ["AA", "BB", "CC", "DD"];
-        // for ($j = 0; $j < 3; $j++) {
-        //     for ($i = 0; $i < 4; $i++) {
-        //         SubKriteria::create([
-        //             "nama" => $namaSubKategori[$i],
-        //             "kriteria_id" => $j+1,
-        //             "kategori_id" => $i+1,
-        //         ]);
-        //     }
-        // }
+        $namaSubKategori = ["AA", "BB", "CC", "DD"];
+        for ($j = 0; $j < 3; $j++) {
+            for ($i = 0; $i < 3; $i++) { // Changed $i < 4 to $i < 3
+                SubKriteria::create([
+                    "nama" => $namaSubKategori[$i],
+                    "kriteria_id" => $j+1,
+                    "kategori_id" => $i+1,
+                ]);
+            }
+        }
 
-        $nilaiIR = [0, 0, 0.58, 1.90, 1.12, 1.24, 1.32, 1.41, 1.45, 1.49, 1.51, 1.48, 1.56, 1.57, 1.59];
+        $nilaiIR = [1, 1, 0.58, 0.9, 1.12, 1.24, 1.32, 1.41, 1.45, 1.49, 1.51, 1.48, 1.56, 1.57, 1.59]; // Corrected 1.9 to 0.9
         for ($i = 0; $i < 15; $i++) {
             DB::table('index_random_consistency')->insert([
                 "ukuran_matriks" => $i+1,

@@ -436,13 +436,41 @@ class AHPController extends Controller
             //     'kriteria_id' => $item->id,
             // ];
 
-            DB::table('matriks_penjumlahan_prioritas_kriteria')->insert([
-                'prioritas' => $nilai / $prioritas,
-                'kriteria_id' => $kriteria_id,
-                'kategori_id' => $item->id,
-                'created_at' => Carbon::now(),
-                'updated_at' => Carbon::now(),
-            ]);
+            // DB::table('matriks_penjumlahan_prioritas_kriteria')->insert([
+            //     'prioritas' => $nilai / $prioritas,
+            //     'kriteria_id' => $kriteria_id,
+            //     'kategori_id' => $item->id,
+            //     'created_at' => Carbon::now(),
+            //     'updated_at' => Carbon::now(),
+            // ]);
+            
+            if ($prioritas != 0) {
+                DB::table('matriks_penjumlahan_prioritas_kriteria')->insert([
+                    'prioritas' => $nilai / $prioritas,
+                    'kriteria_id' => $kriteria_id,
+                    'kategori_id' => $item->id,
+                    'created_at' => Carbon::now(),
+                    'updated_at' => Carbon::now(),
+                ]);
+            } else {
+                // Log error
+                // Log::error('Division by zero error in matriks_penjumlahan_prioritas_kriteria insert', [
+                //     'nilai' => $nilai,
+                //     'prioritas' => $prioritas,
+                //     'kriteria_id' => $kriteria_id,
+                //     'kategori_id' => $item->id
+                // ]);
+
+                // Tangani kondisi ketika $prioritas adalah nol
+                DB::table('matriks_penjumlahan_prioritas_kriteria')->insert([
+                    'prioritas' => 0, // atau nilai default lainnya
+                    'kriteria_id' => $kriteria_id,
+                    'kategori_id' => $item->id,
+                    'created_at' => Carbon::now(),
+                    'updated_at' => Carbon::now(),
+                ]);
+            }
+
         }
         // dd($dataNilai);
         // dd($matriksPerbandingan);

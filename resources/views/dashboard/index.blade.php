@@ -111,14 +111,19 @@
                 <div class="flex flex-col justify-center mt-4 space-x-3 text-sm text-gray-600 dark:text-gray-400">
                     <!-- Chart legend -->
                     @php
+                    
+                        $IR_safe = ($IR != 0) ? $IR : 1;
+
                         foreach ($kriteria as $item) {
                             $jumlah = $matriksPenjumlahan->where('kriteria_id', $item->id)->sum('nilai');
-                            $prioritas = $matriksNilai->where('kriteria_id', $item->id)->sum('nilai') / $matriksNilai->unique('kriteria_id')->count();
+                            $uniqueCount = $matriksNilai->unique('kriteria_id')->count();
+                            $prioritas = ($uniqueCount != 0) ? $matriksNilai->where('kriteria_id', $item->id)->sum('nilai') / $uniqueCount : 0;
                             $hasil = round($jumlah + $prioritas, 3);
                         }
                         $hasilRasio = 0;
                         $jmlKriteria = $kriteria->count();
                     @endphp
+
                     {{-- Cara Cek CR 1 --}}
                     <div class="overflow-x-auto p-3 mt-3">
                         <table id="tabel_data_matriks_penjumlahan" class="nowrap w-full text-sm text-left text-gray-500 dark:text-gray-400 stripe hover" style="width:100%; padding-top: 1em; padding-bottom: 1em;">
@@ -161,14 +166,14 @@
                                 <tr class="border-b dark:border-gray-700">
                                     <td class="px-4 py-3 text-gray-700 dark:text-gray-400 font-semibold">CR</td>
                                     <td class="px-4 py-3 text-gray-700 dark:text-gray-400 font-semibold">
-                                        @if ($CI1/$IR <= 0.1)
+                                        @if ($CI1/$IR_safe <= 0.1)
                                             <span class="text-success">
-                                                {{ round($CI1/$IR, 3) }}
+                                                {{ round($CI1/$IR_safe, 3) }}
                                             </span>
                                             <i class="ri-checkbox-circle-fill ml-1 text-lg text-success"></i>
                                         @else
                                             <span class="text-error">
-                                                {{ round($CI1/$IR, 3) }}
+                                                {{ round($CI1/$IR_safe, 3) }}
                                             </span>
                                             <i class="ri-close-circle-fill ml-1 text-lg text-error"></i>
                                         @endif
@@ -226,14 +231,14 @@
                                 <tr class="border-b dark:border-gray-700">
                                     <td class="px-4 py-3 text-gray-700 dark:text-gray-400 font-semibold">CR</td>
                                     <td class="px-4 py-3 text-gray-700 dark:text-gray-400 font-semibold">
-                                        @if ($CI2/$IR > 0 && $CI2/$IR < 0.1)
+                                        @if ($CI2/$IR_safe > 0 && $CI2/$IR_safe < 0.1)
                                             <span class="text-success">
-                                                {{ round($CI2/$IR, 3) }}
+                                                {{ round($CI2/$IR_safe, 3) }}
                                             </span>
                                             <i class="ri-checkbox-circle-fill ml-1 text-lg text-success"></i>
                                         @else
                                             <span class="text-error">
-                                                {{ round($CI2/$IR, 3) }}
+                                                {{ round($CI2/$IR_safe, 3) }}
                                             </span>
                                             <i class="ri-close-circle-fill ml-1 text-lg text-error"></i>
                                         @endif
@@ -248,6 +253,7 @@
                             </tfoot>
                         </table>
                     </div>
+
                 </div>
             </div>
             <div class="min-w-0 p-4 bg-white rounded-lg shadow-xs dark:bg-gray-800">
